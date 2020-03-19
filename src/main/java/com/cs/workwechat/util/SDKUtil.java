@@ -1,0 +1,117 @@
+package com.cs.workwechat.util;
+
+import com.tencent.wework.Finance;
+import lombok.extern.slf4j.Slf4j;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.UUID;
+
+/**
+ * @Author: CS
+ * @Date: 2020/3/18 11:31 上午
+ * @Description:
+ */
+@Slf4j
+public class SDKUtil {
+
+    private static String SECRET =
+            "23_HzEpTWCF6y2dxQtIGukH-pRcHFnb3r54ME3Rl8m0";
+    private static String CORP_ID =
+            "ww2cfbd257dae39722";
+
+    private static long DEFAULT_TIMEOUT = 5000;
+    private static long DEFAULT_LIMIT = 500;
+    private static long DEFAULT_SEQ = 1;
+    private static int SUCCESS = 0;
+    private static long SDK;
+    private static long SLICE;
+
+
+    /**
+     * 获取sdk
+     *
+     * @return
+     */
+    public static long getSDK() {
+        if (SDK > 0) {
+            return SDK;
+        }
+        SDK = Finance.NewSdk();
+        log.info("初始化sdk：{}", SDK);
+        return SDK;
+    }
+
+    /**
+     * 销毁sdk
+     */
+    public static void destroySdk() {
+        if (SDK > 0) {
+            SDK = 0L;
+        }
+        Finance.DestroySdk(SDK);
+    }
+
+    /**
+     * 初始化函数
+     */
+    public static int init() {
+        return Finance.Init(getSDK(), CORP_ID, SECRET);
+    }
+
+    public static boolean isSuccess(int code) {
+        return code == SUCCESS;
+    }
+
+    /**
+     * 获取加密的聊天数据
+     *
+     * @return
+     */
+    public static String getEncryptChatData(Long seq) {
+        long slice = Finance.NewSlice();
+        int code = Finance.GetChatData(SDK, seq, DEFAULT_LIMIT, null, null, DEFAULT_TIMEOUT, slice);
+        if (!isSuccess(code)) {
+            log.error("获取聊天数据失败，状态码：{}", code);
+            return null;
+        }
+        String encryptChatData = Finance.GetContentFromSlice(slice);
+        Finance.FreeSlice(slice);
+        return encryptChatData;
+    }
+
+    /**
+     * 获取媒体类型文件
+     *
+     * @param sdkField
+     * @param suffix
+     */
+    public static void getMediaData(String sdkField, String suffix) {
+        String indexbuf = "";
+        while (true) {
+            long mediaData = Finance.NewMediaData();
+            int code = Finance.GetMediaData(getSDK(), indexbuf, sdkField, null, null, DEFAULT_TIMEOUT, mediaData);
+            log.info("getmediadata code: {}", code);
+            if (!isSuccess(code)) {
+                return;
+            }
+            System.out.printf("getmediadata outindex len:%d, data_len:%d, is_finis:%d\n", Finance.GetIndexLen(mediaData), Finance.GetDataLen(mediaData), Finance.IsMediaDataFinish(mediaData));
+            try {
+                FileOutputStream outputStream = new FileOutputStream(new File("/work/media/" + UUID.randomUUID()) + suffix);
+                outputStream.write(Finance.GetData(mediaData));
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (Finance.IsMediaDataFinish(mediaData) == 1) {
+                Finance.FreeMediaData(mediaData);
+                break;
+            } else {
+                indexbuf = Finance.GetOutIndexBuf(mediaData);
+                Finance.FreeMediaData(mediaData);
+            }
+        }
+
+    }
+}
