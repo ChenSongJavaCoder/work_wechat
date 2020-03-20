@@ -106,7 +106,6 @@ public class SDKUtil {
 
             if (Finance.IsMediaDataFinish(mediaData) == 1) {
                 Finance.FreeMediaData(mediaData);
-                //TODO 将写入的文件上传oss，删除本地文件
                 File file = new File(fileName);
                 return file;
             } else {

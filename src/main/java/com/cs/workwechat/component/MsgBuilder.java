@@ -15,7 +15,7 @@ import java.io.File;
 /**
  * @Author: CS
  * @Date: 2020/3/19 2:44 下午
- * @Description: TODO 媒体类文件需要上传oss
+ * @Description:
  */
 @Slf4j
 @Component
