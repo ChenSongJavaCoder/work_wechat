@@ -71,7 +71,11 @@ public class BaseMsg<T> {
     @Column(name = "msg_time")
     private Long msgtime;
 
+    @Column(name = "oss_path")
+    private String ossPath;
+
     @ColumnType(column = "content", typeHandler = JsonHandler.class)
     private T content;
+
 
 }

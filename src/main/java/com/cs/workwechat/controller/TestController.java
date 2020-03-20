@@ -3,14 +3,17 @@ package com.cs.workwechat.controller;
 import com.cs.workwechat.mapper.WorkWechatMsgMapper;
 import com.cs.workwechat.pojo.BaseMsg;
 import com.cs.workwechat.pojo.TextMsg;
+import com.cs.workwechat.pojo.enums.MediaType;
 import com.cs.workwechat.pojo.enums.MsgType;
+import com.cs.workwechat.service.OssService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.File;
 
 /**
  * @Author: CS
@@ -27,7 +30,10 @@ public class TestController {
     @Autowired
     ObjectMapper objectMapper;
 
-//    @Scheduled(fixedRate = 600 * 1000)
+    @Autowired
+    OssService ossService;
+
+    //    @Scheduled(fixedRate = 600 * 1000)
     @GetMapping("/test")
     public String test() throws JsonProcessingException {
 
@@ -45,6 +51,12 @@ public class TestController {
             e.printStackTrace();
         }
         return "错了呀";
+    }
+
+    @GetMapping("/upload")
+    public void upload() {
+        File file = new File("/Users/chensong/Desktop/图片/3cf309b12112e59b9886ebff5d4299bd.jp");
+        ossService.upload(file, MediaType.image);
     }
 
 }

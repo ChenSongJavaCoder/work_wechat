@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.UUID;
 
 /**
  * @Author: CS
@@ -86,18 +85,19 @@ public class SDKUtil {
      * @param sdkField
      * @param suffix
      */
-    public static void getMediaData(String sdkField, String suffix) {
+    public static File getMediaData(String sdkField, String suffix) {
         String indexbuf = "";
+        String fileName = "/work/media/" + System.currentTimeMillis() + suffix;
         while (true) {
             long mediaData = Finance.NewMediaData();
             int code = Finance.GetMediaData(getSDK(), indexbuf, sdkField, null, null, DEFAULT_TIMEOUT, mediaData);
             log.info("getmediadata code: {}", code);
             if (!isSuccess(code)) {
-                return;
+                return null;
             }
             System.out.printf("getmediadata outindex len:%d, data_len:%d, is_finis:%d\n", Finance.GetIndexLen(mediaData), Finance.GetDataLen(mediaData), Finance.IsMediaDataFinish(mediaData));
             try {
-                FileOutputStream outputStream = new FileOutputStream(new File("/work/media/" + UUID.randomUUID()) + suffix);
+                FileOutputStream outputStream = new FileOutputStream(new File(fileName));
                 outputStream.write(Finance.GetData(mediaData));
                 outputStream.close();
             } catch (Exception e) {
@@ -106,7 +106,9 @@ public class SDKUtil {
 
             if (Finance.IsMediaDataFinish(mediaData) == 1) {
                 Finance.FreeMediaData(mediaData);
-                break;
+                //TODO 将写入的文件上传oss，删除本地文件
+                File file = new File(fileName);
+                return file;
             } else {
                 indexbuf = Finance.GetOutIndexBuf(mediaData);
                 Finance.FreeMediaData(mediaData);

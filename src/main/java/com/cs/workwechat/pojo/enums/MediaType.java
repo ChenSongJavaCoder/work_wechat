@@ -12,11 +12,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum MediaType {
 
-    image("图片",".jpg"),
-    voice("声音",".amr"),
-    video("视频",".mp4"),
+    image("图片", ".jpg", "image/jpeg"),
+    voice("声音", ".amr", "audio/amr"),
+    video("视频", ".mp4", "video/mpeg4"),
     ;
 
     private String desc;
     private String suffix;
+    private String contentType;
 }

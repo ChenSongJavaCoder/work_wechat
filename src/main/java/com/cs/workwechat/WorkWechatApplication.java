@@ -26,4 +26,5 @@ public class WorkWechatApplication {
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
+
 }

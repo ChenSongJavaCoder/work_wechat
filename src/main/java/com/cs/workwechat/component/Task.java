@@ -1,12 +1,11 @@
 package com.cs.workwechat.component;
 
 import com.cs.workwechat.mapper.WorkWechatMsgMapper;
-import com.cs.workwechat.pojo.*;
-import com.cs.workwechat.pojo.enums.MediaType;
+import com.cs.workwechat.pojo.BaseMsg;
+import com.cs.workwechat.pojo.ChatMsg;
 import com.cs.workwechat.pojo.enums.MsgType;
 import com.cs.workwechat.util.RSAUtils;
 import com.cs.workwechat.util.SDKUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.tencent.wework.Finance;
@@ -57,6 +56,7 @@ public class Task {
         Example example = new Example(BaseMsg.class);
         example.orderBy("seq").desc();
         List<BaseMsg> latest = workWechatMsgMapper.selectByExample(example);
+        log.info("latest: {}", objectMapper.writeValueAsString(latest));
         Long seq = 1L;
         if (!CollectionUtils.isEmpty(latest)) {
             seq = latest.get(0).getSeq() + 1L;
