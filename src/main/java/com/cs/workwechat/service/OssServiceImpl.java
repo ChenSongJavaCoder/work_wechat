@@ -25,7 +25,7 @@ public class OssServiceImpl implements OssService {
     @Autowired
     OssConfig ossConfig;
 
-    String datePath = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + "/";
+    String datePath = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + File.separator;
 
     @Override
     public String upload(File tempFile, MediaType mediaType) {
@@ -39,7 +39,7 @@ public class OssServiceImpl implements OssService {
         ossClient.putObject(ossConfig.getBucketName(), key, tempFile, objectMetadata);
         ossClient.setObjectAcl(ossConfig.getBucketName(), key, CannedAccessControlList.PublicRead);
         ossClient.shutdown();
-        log.info("上传key = {} 的图片,oss文件地址 = {}", key, ossConfig.getUrlPrefix() + "/" + key);
+        log.info("上传key = {} 的图片,oss文件地址 = {}", key, ossConfig.getUrlPrefix() + File.separator + key);
 
         return key;
     }
