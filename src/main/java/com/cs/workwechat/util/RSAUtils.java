@@ -1,29 +1,16 @@
 package com.cs.workwechat.util;
 
-/**
- * @Author: CS
- * @Date: 2020/3/13 5:50 下午
- * @Description:
- */
-
 import org.bouncycastle.util.encoders.Base64;
-import org.springframework.util.Base64Utils;
 
+import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.Signature;
+import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
-import javax.crypto.Cipher;
 
 
 /**

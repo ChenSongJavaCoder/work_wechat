@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @Author: CS
@@ -23,9 +25,11 @@ public class OssServiceImpl implements OssService {
     @Autowired
     OssConfig ossConfig;
 
+    String datePath = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + "/";
+
     @Override
     public String upload(File tempFile, MediaType mediaType) {
-        String key = ossConfig.getFilePath(mediaType) + tempFile.getName();
+        String key = ossConfig.getFilePath(mediaType) + datePath + tempFile.getName();
         log.info("上传key = {}", key);
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(mediaType.getContentType());
