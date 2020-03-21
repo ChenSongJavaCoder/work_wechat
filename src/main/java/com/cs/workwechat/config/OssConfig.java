@@ -39,6 +39,9 @@ public class OssConfig {
     @Value("${aliyun.oss.files.voice}")
     String voice;
 
+    @Value("${aliyun.oss.files.file}")
+    String file;
+
     @Value("${aliyun.oss.urlPrefix}")
     String urlPrefix;
 
@@ -59,6 +62,9 @@ public class OssConfig {
                 break;
             case image:
                 path = prefix + image;
+                break;
+            case file:
+                path = prefix + file;
                 break;
             default:
                 throw new IllegalArgumentException();

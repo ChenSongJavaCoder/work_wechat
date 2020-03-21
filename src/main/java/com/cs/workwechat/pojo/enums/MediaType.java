@@ -15,9 +15,11 @@ public enum MediaType {
     image("图片", ".jpg", "image/jpeg"),
     voice("声音", ".amr", "audio/amr"),
     video("视频", ".mp4", "video/mpeg4"),
+    file("文件", null, null),
     ;
 
     private String desc;
     private String suffix;
     private String contentType;
+
 }

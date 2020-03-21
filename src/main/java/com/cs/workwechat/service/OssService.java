@@ -13,12 +13,12 @@ import java.io.File;
 public interface OssService {
 
     /**
-     * 上传文件到存储空间
-     *
-     * @param tempFile 文件byte数组
-     * @return 文件唯一标识
+     * 上传文件
+     * @param file
+     * @param mediaType
+     * @return
      */
-    String upload(File tempFile, MediaType mediaType);
+    String upload(File file, MediaType mediaType);
 
 
 }

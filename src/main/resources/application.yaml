@@ -37,6 +37,7 @@ aliyun:
       image: image/
       video: video/
       voice: voice/
+      file: file/
     urlPrefix: https://workwechat.oss-cn-hangzhou.aliyuncs.com
 
 logging:

@@ -54,9 +54,19 @@ public class MsgBuilder {
             case card:
                 break;
             case file:
-                break;
+                FileMsg fileMsg = objectMapper.readValue(chatData, FileMsg.class);
+                fileMsg.setContent(fileMsg.getFile());
+                fileMsg.setSeq(seq);
+                file = SDKUtil.getMediaData(fileMsg.getFile().getSdkfileid(), "." + fileMsg.getFile().getFileext());
+                path = ossService.upload(file, MediaType.file);
+                fileMsg.setOssPath(path);
+                file.delete();
+                return fileMsg;
             case link:
-                break;
+                LinkMsg linkMsg = objectMapper.readValue(chatData, LinkMsg.class);
+                linkMsg.setContent(linkMsg.getLink());
+                linkMsg.setSeq(seq);
+                return linkMsg;
             case news:
                 break;
             case todo:
@@ -95,7 +105,10 @@ public class MsgBuilder {
             case collect:
                 break;
             case emotion:
-                break;
+                EmotionMsg emotionMsg = objectMapper.readValue(chatData, EmotionMsg.class);
+                emotionMsg.setContent(emotionMsg.getEmotion());
+                emotionMsg.setSeq(seq);
+                return emotionMsg;
             case meeting:
                 break;
             case calendar:
