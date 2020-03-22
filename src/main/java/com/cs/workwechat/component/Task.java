@@ -70,6 +70,7 @@ public class Task {
         example.orderBy("seq").desc();
         List<BaseMsg> latest = workWechatMsgMapper.selectByExample(example);
         log.info("latest: {}", objectMapper.writeValueAsString(latest));
+        // TODO: 可加入容错机制
         Long seq = 1L;
         if (!CollectionUtils.isEmpty(latest)) {
             seq = latest.get(0).getSeq() + 1L;

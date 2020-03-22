@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.Objects;
 
 /**
  * @Author: CS
@@ -40,31 +41,31 @@ public class MsgBuilder {
                 ImageMsg imageMsg = objectMapper.readValue(chatData, ImageMsg.class);
                 imageMsg.setContent(imageMsg.getImage());
                 imageMsg.setSeq(seq);
-                uploadOss(imageMsg.getImage().getSdkfileid(), MediaType.image.getSuffix(), imageMsg);
+                uploadOss(imageMsg.getImage().getSdkfileid(), MediaType.image, imageMsg);
                 return imageMsg;
             case emotion:
                 EmotionMsg emotionMsg = objectMapper.readValue(chatData, EmotionMsg.class);
                 emotionMsg.setContent(emotionMsg.getEmotion());
                 emotionMsg.setSeq(seq);
-                uploadOss(emotionMsg.getEmotion().getSdkfileid(), MediaType.image.getSuffix(), emotionMsg);
+                uploadOss(emotionMsg.getEmotion().getSdkfileid(), MediaType.emotion, emotionMsg);
                 return emotionMsg;
             case file:
                 FileMsg fileMsg = objectMapper.readValue(chatData, FileMsg.class);
                 fileMsg.setContent(fileMsg.getFile());
                 fileMsg.setSeq(seq);
-                uploadOss(fileMsg.getFile().getSdkfileid(), "." + fileMsg.getFile().getFileext(), fileMsg);
+                uploadOss(fileMsg.getFile().getSdkfileid(), MediaType.file, fileMsg);
                 return fileMsg;
             case video:
                 VideoMsg videoMsg = objectMapper.readValue(chatData, VideoMsg.class);
                 videoMsg.setContent(videoMsg.getVideo());
                 videoMsg.setSeq(seq);
-                uploadOss(videoMsg.getVideo().getSdkfileid(), MediaType.video.getSuffix(), videoMsg);
+                uploadOss(videoMsg.getVideo().getSdkfileid(), MediaType.video, videoMsg);
                 return videoMsg;
             case voice:
                 VoiceMsg voiceMsg = objectMapper.readValue(chatData, VoiceMsg.class);
                 voiceMsg.setContent(voiceMsg.getVoice());
                 voiceMsg.setSeq(seq);
-                uploadOss(voiceMsg.getVoice().getSdkfileid(), MediaType.voice.getSuffix(), voiceMsg);
+                uploadOss(voiceMsg.getVoice().getSdkfileid(), MediaType.voice, voiceMsg);
                 return voiceMsg;
             case weapp:
                 WeappMsg weappMsg = objectMapper.readValue(chatData, WeappMsg.class);
@@ -121,12 +122,20 @@ public class MsgBuilder {
      * 上传至oss
      *
      * @param sdkField
-     * @param suffix
+     * @param mediaType
      * @param baseMsg
      */
-    private void uploadOss(String sdkField, String suffix, BaseMsg baseMsg) {
+    private void uploadOss(String sdkField, MediaType mediaType, BaseMsg baseMsg) {
+        String suffix = mediaType.getSuffix();
+        if (mediaType.equals(MediaType.file)) {
+            FileMsg fileMsg = (FileMsg) baseMsg;
+            suffix = "." + fileMsg.getFile().getFileext();
+        }
         File file = SDKUtil.getMediaData(sdkField, suffix);
-        String path = ossService.upload(file, MediaType.image);
+        if (Objects.isNull(file)) {
+            return;
+        }
+        String path = ossService.upload(file, mediaType);
         baseMsg.setOssPath(path);
         file.delete();
     }

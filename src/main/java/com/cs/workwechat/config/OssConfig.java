@@ -63,6 +63,9 @@ public class OssConfig {
             case image:
                 path = prefix + image;
                 break;
+            case emotion:
+                path = prefix + image;
+                break;
             case file:
                 path = prefix + file;
                 break;

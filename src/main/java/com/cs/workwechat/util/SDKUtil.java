@@ -95,11 +95,11 @@ public class SDKUtil {
         while (true) {
             long mediaData = Finance.NewMediaData();
             int code = Finance.GetMediaData(getSDK(), indexbuf, sdkField, null, null, DEFAULT_TIMEOUT, mediaData);
-            log.info("getmediadata code: {}", code);
             if (!isSuccess(code)) {
+                log.error("获取媒体类型文件错误，状态码：{}", code);
                 return null;
             }
-            System.out.printf("getmediadata outindex len:%d, data_len:%d, is_finis:%d\n", Finance.GetIndexLen(mediaData), Finance.GetDataLen(mediaData), Finance.IsMediaDataFinish(mediaData));
+            log.info("getmediadata outindex len:{}, data_len:{}, is_finis:{}", Finance.GetIndexLen(mediaData), Finance.GetDataLen(mediaData), Finance.IsMediaDataFinish(mediaData));
             try {
                 FileOutputStream outputStream = new FileOutputStream(new File(fileName));
                 outputStream.write(Finance.GetData(mediaData));

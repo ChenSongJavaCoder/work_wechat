@@ -13,6 +13,7 @@ import lombok.Getter;
 public enum MediaType {
 
     image("图片", ".jpg", "image/jpeg"),
+    emotion("表情", ".jpeg", "image/jpeg"),
     voice("声音", ".amr", "audio/amr"),
     video("视频", ".mp4", "video/mpeg4"),
     file("文件", null, null),
