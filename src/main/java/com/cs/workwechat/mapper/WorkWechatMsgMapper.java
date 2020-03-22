@@ -1,10 +1,8 @@
 package com.cs.workwechat.mapper;
 
-import com.cs.workwechat.pojo.BaseMsg;
+import com.cs.workwechat.base.TkBaseMapper;
+import com.cs.workwechat.entity.BaseMsg;
 import org.springframework.stereotype.Repository;
-import tk.mybatis.mapper.common.BaseMapper;
-import tk.mybatis.mapper.common.MySqlMapper;
-import tk.mybatis.mapper.common.example.SelectByExampleMapper;
 
 /**
  * @Author: CS
@@ -12,5 +10,5 @@ import tk.mybatis.mapper.common.example.SelectByExampleMapper;
  * @Description:
  */
 @Repository
-public interface WorkWechatMsgMapper extends BaseMapper<BaseMsg>, SelectByExampleMapper<BaseMsg>, MySqlMapper<BaseMsg> {
+public interface WorkWechatMsgMapper extends TkBaseMapper<BaseMsg> {
 }

@@ -1,5 +1,6 @@
 package com.cs.workwechat.pojo;
 
+import com.cs.workwechat.entity.BaseMsg;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -10,7 +11,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class TextMsg extends BaseMsg<TextMsg.Text>{
+public class TextMsg extends BaseMsg<TextMsg.Text> {
 
     private Text text;
 

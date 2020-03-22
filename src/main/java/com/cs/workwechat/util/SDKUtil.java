@@ -27,6 +27,10 @@ public class SDKUtil {
     private static long SLICE;
 
 
+    public static String getCorpId() {
+        return CORP_ID;
+    }
+
     /**
      * 获取sdk
      *

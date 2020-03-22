@@ -1,13 +1,8 @@
 package com.cs.workwechat.pojo.enums;
 
 import com.cs.workwechat.pojo.*;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * @Author: CS
@@ -20,7 +15,7 @@ public enum MsgType {
     text("文本", TextMsg.class),
     image("图片", ImageMsg.class),
     agree("同意会话聊天内容",Object.class),
-    revoke("撤回消息",Object.class),
+    revoke("撤回消息", RevokeMsg.class),
     // 媒体文件
     voice("语音", VoiceMsg.class),
     video("视频", VideoMsg.class),
@@ -46,5 +41,10 @@ public enum MsgType {
 
     private String desc;
     private Class clazz;
+
+
+    public static void main(String[] args) {
+        System.out.println(values().length);
+    }
 
 }

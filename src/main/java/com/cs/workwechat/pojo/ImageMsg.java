@@ -1,5 +1,6 @@
 package com.cs.workwechat.pojo;
 
+import com.cs.workwechat.entity.BaseMsg;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

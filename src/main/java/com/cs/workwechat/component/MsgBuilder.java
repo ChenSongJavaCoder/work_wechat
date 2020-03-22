@@ -1,5 +1,6 @@
 package com.cs.workwechat.component;
 
+import com.cs.workwechat.entity.BaseMsg;
 import com.cs.workwechat.pojo.*;
 import com.cs.workwechat.pojo.enums.MediaType;
 import com.cs.workwechat.pojo.enums.MsgType;
@@ -29,8 +30,6 @@ public class MsgBuilder {
 
 
     public BaseMsg buildBaseMsg(MsgType msgType, String chatData, Long seq) throws Exception {
-        File file;
-        String path;
         switch (msgType) {
             case text:
                 TextMsg textMsg = objectMapper.readValue(chatData, TextMsg.class);
@@ -41,27 +40,44 @@ public class MsgBuilder {
                 ImageMsg imageMsg = objectMapper.readValue(chatData, ImageMsg.class);
                 imageMsg.setContent(imageMsg.getImage());
                 imageMsg.setSeq(seq);
-                file = SDKUtil.getMediaData(imageMsg.getImage().getSdkfileid(), MediaType.image.getSuffix());
-                path = ossService.upload(file, MediaType.image);
-                imageMsg.setOssPath(path);
-                file.delete();
+                uploadOss(imageMsg.getImage().getSdkfileid(), MediaType.image.getSuffix(), imageMsg);
                 return imageMsg;
+            case emotion:
+                EmotionMsg emotionMsg = objectMapper.readValue(chatData, EmotionMsg.class);
+                emotionMsg.setContent(emotionMsg.getEmotion());
+                emotionMsg.setSeq(seq);
+                uploadOss(emotionMsg.getEmotion().getSdkfileid(), MediaType.image.getSuffix(), emotionMsg);
+                return emotionMsg;
+            case file:
+                FileMsg fileMsg = objectMapper.readValue(chatData, FileMsg.class);
+                fileMsg.setContent(fileMsg.getFile());
+                fileMsg.setSeq(seq);
+                uploadOss(fileMsg.getFile().getSdkfileid(), "." + fileMsg.getFile().getFileext(), fileMsg);
+                return fileMsg;
+            case video:
+                VideoMsg videoMsg = objectMapper.readValue(chatData, VideoMsg.class);
+                videoMsg.setContent(videoMsg.getVideo());
+                videoMsg.setSeq(seq);
+                uploadOss(videoMsg.getVideo().getSdkfileid(), MediaType.video.getSuffix(), videoMsg);
+                return videoMsg;
+            case voice:
+                VoiceMsg voiceMsg = objectMapper.readValue(chatData, VoiceMsg.class);
+                voiceMsg.setContent(voiceMsg.getVoice());
+                voiceMsg.setSeq(seq);
+                uploadOss(voiceMsg.getVoice().getSdkfileid(), MediaType.voice.getSuffix(), voiceMsg);
+                return voiceMsg;
             case weapp:
                 WeappMsg weappMsg = objectMapper.readValue(chatData, WeappMsg.class);
                 weappMsg.setContent(weappMsg.getWeapp());
                 weappMsg.setSeq(seq);
                 return weappMsg;
+            case revoke:
+                RevokeMsg revokeMsg = objectMapper.readValue(chatData, RevokeMsg.class);
+                revokeMsg.setContent(revokeMsg.getRevoke());
+                revokeMsg.setSeq(seq);
+                return revokeMsg;
             case card:
                 break;
-            case file:
-                FileMsg fileMsg = objectMapper.readValue(chatData, FileMsg.class);
-                fileMsg.setContent(fileMsg.getFile());
-                fileMsg.setSeq(seq);
-                file = SDKUtil.getMediaData(fileMsg.getFile().getSdkfileid(), "." + fileMsg.getFile().getFileext());
-                path = ossService.upload(file, MediaType.file);
-                fileMsg.setOssPath(path);
-                file.delete();
-                return fileMsg;
             case link:
                 LinkMsg linkMsg = objectMapper.readValue(chatData, LinkMsg.class);
                 linkMsg.setContent(linkMsg.getLink());
@@ -77,38 +93,10 @@ public class MsgBuilder {
                 break;
             case mixed:
                 break;
-            case video:
-                VideoMsg videoMsg = objectMapper.readValue(chatData, VideoMsg.class);
-                videoMsg.setContent(videoMsg.getVideo());
-                videoMsg.setSeq(seq);
-                file = SDKUtil.getMediaData(videoMsg.getVideo().getSdkfileid(), MediaType.video.getSuffix());
-                path = ossService.upload(file, MediaType.video);
-                videoMsg.setOssPath(path);
-                file.delete();
-                return videoMsg;
-            case voice:
-                VoiceMsg voiceMsg = objectMapper.readValue(chatData, VoiceMsg.class);
-                voiceMsg.setContent(voiceMsg.getVoice());
-                voiceMsg.setSeq(seq);
-                file = SDKUtil.getMediaData(voiceMsg.getVoice().getSdkfileid(), MediaType.voice.getSuffix());
-                path = ossService.upload(file, MediaType.voice);
-                voiceMsg.setOssPath(path);
-                file.delete();
-                return voiceMsg;
             case docmsg:
                 break;
-            case revoke:
-                RevokeMsg revokeMsg = objectMapper.readValue(chatData, RevokeMsg.class);
-                revokeMsg.setContent(revokeMsg.getRevoke());
-                revokeMsg.setSeq(seq);
-                return revokeMsg;
             case collect:
                 break;
-            case emotion:
-                EmotionMsg emotionMsg = objectMapper.readValue(chatData, EmotionMsg.class);
-                emotionMsg.setContent(emotionMsg.getEmotion());
-                emotionMsg.setSeq(seq);
-                return emotionMsg;
             case meeting:
                 break;
             case calendar:
@@ -126,5 +114,20 @@ public class MsgBuilder {
         }
 
         return null;
+    }
+
+
+    /**
+     * 上传至oss
+     *
+     * @param sdkField
+     * @param suffix
+     * @param baseMsg
+     */
+    private void uploadOss(String sdkField, String suffix, BaseMsg baseMsg) {
+        File file = SDKUtil.getMediaData(sdkField, suffix);
+        String path = ossService.upload(file, MediaType.image);
+        baseMsg.setOssPath(path);
+        file.delete();
     }
 }

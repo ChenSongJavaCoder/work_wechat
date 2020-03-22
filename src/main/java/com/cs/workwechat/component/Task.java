@@ -1,11 +1,16 @@
 package com.cs.workwechat.component;
 
+import com.cs.workwechat.entity.BaseMsg;
+import com.cs.workwechat.entity.Chat;
+import com.cs.workwechat.mapper.ChatMapper;
 import com.cs.workwechat.mapper.WorkWechatMsgMapper;
-import com.cs.workwechat.pojo.BaseMsg;
 import com.cs.workwechat.pojo.ChatMsg;
+import com.cs.workwechat.pojo.RevokeMsg;
+import com.cs.workwechat.pojo.TextMsg;
 import com.cs.workwechat.pojo.enums.MsgType;
 import com.cs.workwechat.util.RSAUtils;
 import com.cs.workwechat.util.SDKUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.tencent.wework.Finance;
@@ -14,10 +19,14 @@ import org.bouncycastle.util.encoders.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -36,6 +45,9 @@ public class Task {
     WorkWechatMsgMapper workWechatMsgMapper;
 
     @Autowired
+    ChatMapper chatMapper;
+
+    @Autowired
     MsgBuilder msgBuilder;
 
     @Autowired
@@ -50,6 +62,7 @@ public class Task {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String getChatData() throws Exception {
         SDKUtil.init();
         PageHelper.startPage(1, 1);
@@ -91,11 +104,63 @@ public class Task {
         List list = baseMsgList.stream().filter(Objects::nonNull).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(list)) {
             workWechatMsgMapper.insertList(list);
+            chatMapper.insertList(buildChat(list));
+            chatMapper.checkIsCancel();
         }
 
         return null;
 
     }
+
+    private List<Chat> buildChat(List<BaseMsg> list) {
+        return list.stream().map(p -> {
+            Chat chat = new Chat();
+            if (p.getMsgtype().equals(MsgType.text)) {
+                TextMsg.Text text = (TextMsg.Text) p.getContent();
+                chat.setContent(text.getContent());
+            } else if (p.getMsgtype().equals(MsgType.revoke)) {
+                RevokeMsg.Revoke revoke = (RevokeMsg.Revoke) p.getContent();
+                chat.setContent(revoke.getPre_msgid());
+            } else {
+                try {
+                    chat.setContent(objectMapper.writeValueAsString(p.getContent()));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
+            chat.setCorpId(SDKUtil.getCorpId());
+            chat.setFromId(p.getFrom());
+
+            chat.setIsAuto(StringUtils.startsWithIgnoreCase(p.getFrom(), "wb") ? true : false);
+            chat.setIsCancel(false);
+            chat.setMsgId(p.getMsgid());
+            chat.setMsgSeq(p.getSeq());
+            chat.setMsgTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(p.getMsgtime()), ZoneId.systemDefault()));
+            chat.setMsgType(p.getMsgtype().name());
+            chat.setEmpId(null);
+            chat.setSource(null);
+            chat.setUserId(null);
+            chat.setUserNickName(null);
+            chat.setIsDeleted(false);
+            chat.setOssPath(p.getOssPath());
+            // 群聊
+            if (StringUtils.hasText(p.getRoomid())) {
+                chat.setIsGroup(true);
+                chat.setRoomId(p.getRoomid());
+                chat.setToId("");
+            } else {
+                chat.setIsGroup(false);
+                chat.setRoomId("");
+                chat.setToId(p.getTolist().get(0).toString());
+            }
+
+            chat.setCreatedBy("sys");
+            chat.setUpdatedBy("sys");
+            return chat;
+        }).collect(Collectors.toList());
+
+    }
+
 
 
 }

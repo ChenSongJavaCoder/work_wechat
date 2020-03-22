@@ -1,7 +1,7 @@
 package com.cs.workwechat.controller;
 
+import com.cs.workwechat.entity.BaseMsg;
 import com.cs.workwechat.mapper.WorkWechatMsgMapper;
-import com.cs.workwechat.pojo.BaseMsg;
 import com.cs.workwechat.pojo.TextMsg;
 import com.cs.workwechat.pojo.enums.MediaType;
 import com.cs.workwechat.pojo.enums.MsgType;

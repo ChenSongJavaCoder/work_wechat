@@ -1,4 +1,4 @@
-package com.cs.workwechat.pojo;
+package com.cs.workwechat.entity;
 
 import com.cs.workwechat.handler.JsonHandler;
 import com.cs.workwechat.handler.StringListHandler;
@@ -25,7 +25,6 @@ public class BaseMsg<T> {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     /**
      * 消息序列号
      */
