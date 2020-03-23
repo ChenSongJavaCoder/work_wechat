@@ -108,7 +108,7 @@ public class Task {
             chatMapper.insertList(buildChat(list));
             chatMapper.checkIsCancel();
         }
-
+        SDKUtil.destroySdk();
         return null;
 
     }
@@ -124,7 +124,7 @@ public class Task {
                 chat.setContent(revoke.getPre_msgid());
             } else {
                 try {
-                    chat.setContent(objectMapper.writeValueAsString(p.getContent()));
+                    chat.setContentObj(objectMapper.writeValueAsString(p.getContent()));
                 } catch (JsonProcessingException e) {
                     e.printStackTrace();
                 }
@@ -136,8 +136,10 @@ public class Task {
             chat.setIsCancel(false);
             chat.setMsgId(p.getMsgid());
             chat.setMsgSeq(p.getSeq());
-            chat.setMsgTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(p.getMsgtime()), ZoneId.systemDefault()));
+            LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(p.getMsgtime()), ZoneId.systemDefault());
+            chat.setMsgTime(localDateTime);
             chat.setMsgType(p.getMsgtype().name());
+            // something useless
             chat.setEmpId(null);
             chat.setSource(null);
             chat.setUserId(null);
@@ -148,10 +150,8 @@ public class Task {
             if (StringUtils.hasText(p.getRoomid())) {
                 chat.setIsGroup(true);
                 chat.setRoomId(p.getRoomid());
-                chat.setToId("");
             } else {
                 chat.setIsGroup(false);
-                chat.setRoomId("");
                 chat.setToId(p.getTolist().get(0).toString());
             }
 
@@ -161,7 +161,6 @@ public class Task {
         }).collect(Collectors.toList());
 
     }
-
 
 
 }

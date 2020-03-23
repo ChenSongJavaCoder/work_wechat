@@ -357,7 +357,7 @@ public class RSAUtils {
 
         StringBuilder str = new StringBuilder();
         for (int i = 0; i < 1; i++) {
-            str.append("我爱祖国|");
+            str.append("做个人吧");
         }
 
 

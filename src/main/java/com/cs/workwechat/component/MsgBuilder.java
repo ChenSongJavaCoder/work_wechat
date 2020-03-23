@@ -78,37 +78,71 @@ public class MsgBuilder {
                 revokeMsg.setSeq(seq);
                 return revokeMsg;
             case card:
-                break;
+                CardMsg cardMsg = objectMapper.readValue(chatData, CardMsg.class);
+                cardMsg.setContent(cardMsg.getCard());
+                cardMsg.setSeq(seq);
+                return cardMsg;
             case link:
                 LinkMsg linkMsg = objectMapper.readValue(chatData, LinkMsg.class);
                 linkMsg.setContent(linkMsg.getLink());
                 linkMsg.setSeq(seq);
                 return linkMsg;
             case news:
-                break;
+                NewsMsg newsMsg = objectMapper.readValue(chatData, NewsMsg.class);
+                newsMsg.setContent(newsMsg.getNews());
+                newsMsg.setSeq(seq);
+                return newsMsg;
             case todo:
-                break;
+                TodoMsg todoMsg = objectMapper.readValue(chatData, TodoMsg.class);
+                todoMsg.setContent(todoMsg.getTodo());
+                todoMsg.setSeq(seq);
+                return todoMsg;
+            case agree:
+                AgreeMsg agreeMsg = objectMapper.readValue(chatData, AgreeMsg.class);
+                agreeMsg.setContent(agreeMsg.getAgree());
+                agreeMsg.setSeq(seq);
+                return agreeMsg;
+            case mixed:
+                //Todo 需要特殊处理
+                MixedMsg mixedMsg = objectMapper.readValue(chatData, MixedMsg.class);
+                mixedMsg.setContent(mixedMsg.getMixed());
+                mixedMsg.setSeq(seq);
+                return mixedMsg;
+            case docmsg:
+                DocMsg docMsg = objectMapper.readValue(chatData, DocMsg.class);
+                docMsg.setContent(docMsg.getDoc());
+                docMsg.setSeq(seq);
+                return docMsg;
+            case meeting:
+                MeetingMsg meetingMsg = objectMapper.readValue(chatData, MeetingMsg.class);
+                meetingMsg.setContent(meetingMsg.getMeeting());
+                meetingMsg.setSeq(seq);
+                return meetingMsg;
+            case calendar:
+                CalendarMsg calendarMsg = objectMapper.readValue(chatData, CalendarMsg.class);
+                calendarMsg.setContent(calendarMsg.getCalendar());
+                calendarMsg.setSeq(seq);
+                return calendarMsg;
+            case location:
+                LocationMsg locationMsg = objectMapper.readValue(chatData, LocationMsg.class);
+                locationMsg.setContent(locationMsg.getLocation());
+                locationMsg.setSeq(seq);
+                return locationMsg;
+            case markdown:
+                MarkdownMsg markdownMsg = objectMapper.readValue(chatData, MarkdownMsg.class);
+                markdownMsg.setContent(markdownMsg.getMarkdown());
+                markdownMsg.setSeq(seq);
+                return markdownMsg;
+            case redpacket:
+                RedPacketMsg redPacketMsg = objectMapper.readValue(chatData, RedPacketMsg.class);
+                redPacketMsg.setContent(redPacketMsg.getRedPacket());
+                redPacketMsg.setSeq(seq);
+                return redPacketMsg;
             case vote:
                 break;
-            case agree:
-                break;
-            case mixed:
-                break;
-            case docmsg:
+            case chatrecord:
                 break;
             case collect:
-                break;
-            case meeting:
-                break;
-            case calendar:
-                break;
-            case location:
-                break;
-            case markdown:
-                break;
-            case redpacket:
-                break;
-            case chatrecord:
                 break;
             default:
                 log.error("未知数据类型！");

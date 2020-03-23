@@ -11,7 +11,7 @@ spring:
     name: work-wechat
 
   datasource:
-    url: jdbc:mysql://rm-bp148q2xv8ye4ay3r5o.mysql.rds.aliyuncs.com:3306/dw_data?useUnicode=true&&characterEncoding=UTF8&useSSL=false&zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://rm-bp148q2xv8ye4ay3r5o.mysql.rds.aliyuncs.com:3306/dw_data?useUnicode=true&&characterEncoding=UTF8&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
     username: dbm
     password: dbm@91dby
     driver-class-name: com.mysql.cj.jdbc.Driver

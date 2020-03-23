@@ -50,9 +50,10 @@ public class SDKUtil {
      */
     public static void destroySdk() {
         if (SDK > 0) {
+            log.info("销毁sdk：{}", SDK);
+            Finance.DestroySdk(SDK);
             SDK = 0L;
         }
-        Finance.DestroySdk(SDK);
     }
 
     /**

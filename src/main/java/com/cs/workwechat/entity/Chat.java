@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 /**
  * @Author: CS
  * @Date: 2020/3/21 4:51 下午
- * @Description:
+ * @Description: 什么脑残操作
  */
 @Data
 @Accessors(chain = true)
@@ -26,6 +26,7 @@ public class Chat extends BaseEntity {
     private String fromId;
     private String toId;
     private String content;
+    private String contentObj;
     private String msgType;
     private LocalDateTime msgTime;
     private String userNickName;

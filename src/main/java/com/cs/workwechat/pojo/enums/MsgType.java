@@ -14,37 +14,33 @@ import lombok.Getter;
 public enum MsgType {
     text("文本", TextMsg.class),
     image("图片", ImageMsg.class),
-    agree("同意会话聊天内容",Object.class),
+    agree("同意会话聊天内容", AgreeMsg.class),
     revoke("撤回消息", RevokeMsg.class),
     // 媒体文件
     voice("语音", VoiceMsg.class),
     video("视频", VideoMsg.class),
-    card("名片",Object.class),
-    location("位置",Object.class),
-    emotion("表情",Object.class),
-    file("文件",Object.class),
-    link("链接",Object.class),
+    card("名片", CardMsg.class),
+    location("位置", LocationMsg.class),
+    emotion("表情", EmotionMsg.class),
+    file("文件", FileMsg.class),
+    link("链接", LinkMsg.class),
     weapp("小程序", WeappMsg.class),
     chatrecord("会话记录消息，item子对象",Object.class),
-    todo("待办消息",Object.class),
+    todo("待办消息", TodoMsg.class),
     vote("投票消息",Object.class),
     collect("填表消息",Object.class),
-    redpacket("红包消息",Object.class),
-    meeting("会议邀请消息",Object.class),
+    redpacket("红包消息", RedPacketMsg.class),
+    meeting("会议邀请消息", MeetingMsg.class),
     //    switch("切换企业日志"),
-    docmsg("在线文档消息",Object.class),
-    markdown("MarkDown格式消息",Object.class),
-    news("图文消息",Object.class),
-    calendar("日程消息",Object.class),
-    mixed("混合消息",Object.class),
+    docmsg("在线文档消息", DocMsg.class),
+    markdown("MarkDown格式消息", MarkdownMsg.class),
+    news("图文消息", NewsMsg.class),
+    calendar("日程消息", CalendarMsg.class),
+    mixed("混合消息", MixedMsg.class),
     ;
 
     private String desc;
     private Class clazz;
 
-
-    public static void main(String[] args) {
-        System.out.println(values().length);
-    }
 
 }
