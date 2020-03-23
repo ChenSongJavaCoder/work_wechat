@@ -90,9 +90,11 @@ public class SDKUtil {
      * @param sdkField
      * @param suffix
      */
-    public static File getMediaData(String sdkField, String suffix) {
+    public static File getMediaData(String sdkField, String suffix) throws Exception {
         String indexbuf = "";
         String fileName = "/work/media/" + System.currentTimeMillis() + suffix;
+        FileOutputStream outputStream = new FileOutputStream(new File(fileName));
+
         while (true) {
             long mediaData = Finance.NewMediaData();
             int code = Finance.GetMediaData(getSDK(), indexbuf, sdkField, null, null, DEFAULT_TIMEOUT, mediaData);
@@ -101,15 +103,10 @@ public class SDKUtil {
                 return null;
             }
             log.info("getmediadata outindex len:{}, data_len:{}, is_finis:{}", Finance.GetIndexLen(mediaData), Finance.GetDataLen(mediaData), Finance.IsMediaDataFinish(mediaData));
-            try {
-                FileOutputStream outputStream = new FileOutputStream(new File(fileName));
-                outputStream.write(Finance.GetData(mediaData));
-                outputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            outputStream.write(Finance.GetData(mediaData));
 
             if (Finance.IsMediaDataFinish(mediaData) == 1) {
+                outputStream.close();
                 Finance.FreeMediaData(mediaData);
                 File file = new File(fileName);
                 return file;

@@ -165,7 +165,12 @@ public class MsgBuilder {
             FileMsg fileMsg = (FileMsg) baseMsg;
             suffix = "." + fileMsg.getFile().getFileext();
         }
-        File file = SDKUtil.getMediaData(sdkField, suffix);
+        File file = null;
+        try {
+            file = SDKUtil.getMediaData(sdkField, suffix);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (Objects.isNull(file)) {
             return;
         }

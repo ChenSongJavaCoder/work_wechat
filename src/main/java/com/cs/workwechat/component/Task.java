@@ -73,7 +73,7 @@ public class Task {
         // TODO: 可加入容错机制
         Long seq = 1L;
         if (!CollectionUtils.isEmpty(latest)) {
-            seq = latest.get(0).getSeq() + 1L;
+            seq = latest.get(0).getSeq();
         }
         String en = SDKUtil.getEncryptChatData(seq);
         if (StringUtils.isEmpty(en)) {
