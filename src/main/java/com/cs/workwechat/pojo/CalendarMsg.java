@@ -3,6 +3,8 @@ package com.cs.workwechat.pojo;
 import com.cs.workwechat.entity.BaseMsg;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @Author: CS
  * @Date: 2020/3/23 2:10 下午
@@ -29,7 +31,7 @@ public class CalendarMsg extends BaseMsg<CalendarMsg.Calendar> {
         /**
          * 日程参与人
          */
-        private String attendeename;
+        private List<String> attendeename;
 
         /**
          * 日程开始时间
