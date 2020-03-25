@@ -137,7 +137,20 @@ public class Finance {
     public native static int IsMediaDataFinish(long mediaData);
 
     static {
+        String path = Finance.class.getClassLoader().getResource("").getPath().replace("file:", "");
+        String jarPath = path.substring(0, path.indexOf("work-wechat"));
+        System.out.println(jarPath);
+        String jarShell = ("jar -xvf " + jarPath + "work-wechat-0.0.1-SNAPSHOT.jar");
+        System.out.println(jarShell);
+        String cpShell = ("cp " + jarPath + "BOOT-INF/classes/libWeWorkFinanceSdk_Java.so " + "/usr/lib");
+        System.out.println(cpShell);
+        String and = " && ";
+        String a = "cd " + jarPath + and + jarShell + and + cpShell;
+        System.out.println(a);
+        CommandHelper.process(a);
         System.loadLibrary("WeWorkFinanceSdk_Java");
     }
+
+
 }
 

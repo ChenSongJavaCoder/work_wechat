@@ -91,13 +91,18 @@ public class SDKUtil {
      * @param suffix
      */
     public static File getMediaData(String sdkField, String suffix) throws Exception {
-        String indexbuf = "";
-        String fileName = "/work/media/" + System.currentTimeMillis() + suffix;
+        String indexBuf = "";
+        String dirPath = "/work/temp/";
+        File dir = new File(dirPath);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+        String fileName = dirPath + System.currentTimeMillis() + suffix;
         FileOutputStream outputStream = new FileOutputStream(new File(fileName));
 
         while (true) {
             long mediaData = Finance.NewMediaData();
-            int code = Finance.GetMediaData(getSDK(), indexbuf, sdkField, null, null, DEFAULT_TIMEOUT, mediaData);
+            int code = Finance.GetMediaData(getSDK(), indexBuf, sdkField, null, null, DEFAULT_TIMEOUT, mediaData);
             if (!isSuccess(code)) {
                 log.error("获取媒体类型文件错误，状态码：{}", code);
                 return null;
@@ -111,7 +116,7 @@ public class SDKUtil {
                 File file = new File(fileName);
                 return file;
             } else {
-                indexbuf = Finance.GetOutIndexBuf(mediaData);
+                indexBuf = Finance.GetOutIndexBuf(mediaData);
                 Finance.FreeMediaData(mediaData);
             }
         }

@@ -53,7 +53,7 @@ public class Task {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Scheduled(fixedRate = 60 * 1000)
+    @Scheduled(fixedRate = 60 * 1000 * 3)
     public void pullChatData() {
         try {
             getChatData();

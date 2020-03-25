@@ -29,7 +29,15 @@ public class MsgBuilder {
     @Autowired
     OssService ossService;
 
-
+    /**
+     * 构建baseMsg
+     *
+     * @param msgType
+     * @param chatData
+     * @param seq
+     * @return
+     * @throws Exception
+     */
     public BaseMsg buildBaseMsg(MsgType msgType, String chatData, Long seq) throws Exception {
         switch (msgType) {
             case text:
