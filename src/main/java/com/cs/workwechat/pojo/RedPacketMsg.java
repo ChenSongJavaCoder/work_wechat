@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class RedPacketMsg extends BaseMsg<RedPacketMsg.RedPacket> {
 
-    private RedPacket redPacket;
+    private RedPacket redpacket;
 
     @Data
     public static class RedPacket {

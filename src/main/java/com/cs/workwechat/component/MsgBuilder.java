@@ -143,7 +143,7 @@ public class MsgBuilder {
                 return markdownMsg;
             case redpacket:
                 RedPacketMsg redPacketMsg = objectMapper.readValue(chatData, RedPacketMsg.class);
-                redPacketMsg.setContent(redPacketMsg.getRedPacket());
+                redPacketMsg.setContent(redPacketMsg.getRedpacket());
                 redPacketMsg.setSeq(seq);
                 return redPacketMsg;
             case vote:

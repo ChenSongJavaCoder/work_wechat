@@ -20,7 +20,7 @@ public class SDKUtil {
             "ww2cfbd257dae39722";
 
     private static long DEFAULT_TIMEOUT = 5000;
-    private static long DEFAULT_LIMIT = 500;
+    private static long DEFAULT_LIMIT = 200;
     private static long DEFAULT_SEQ = 1;
     private static int SUCCESS = 0;
     private static long SDK;
