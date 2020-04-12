@@ -85,7 +85,21 @@
             <artifactId>commons-io</artifactId>
             <version>2.6</version>
         </dependency>
-
+        <!--        <dependency>-->
+        <!--            <groupId>com.aliyun.schedulerx</groupId>-->
+        <!--            <artifactId>schedulerx2-worker</artifactId>-->
+        <!--            <version>1.0.8</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.aliyun.schedulerx</groupId>-->
+        <!--            <artifactId>schedulerx2-spring-boot-starter</artifactId>-->
+        <!--            <version>1.0.8</version>-->
+        <!--        </dependency>-->
+        <dependency>
+            <groupId>com.github.dadiyang</groupId>
+            <artifactId>jave</artifactId>
+            <version>1.0.5</version>
+        </dependency>
 
     </dependencies>
 

@@ -1,6 +1,8 @@
 package com.cs.workwechat.util;
 
+import com.cs.workwechat.pojo.enums.MediaType;
 import com.tencent.wework.Finance;
+import it.sauronsoftware.jave.AudioUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -114,6 +116,13 @@ public class SDKUtil {
                 outputStream.close();
                 Finance.FreeMediaData(mediaData);
                 File file = new File(fileName);
+                // 如果为amr文件转码mp3
+                if (MediaType.voice.getSuffix().equals(suffix)) {
+                    File voiceFile = new File(fileName.replace(suffix, ".mp3"));
+                    AudioUtils.amrToMp3(file, voiceFile);
+                    file.delete();
+                    return voiceFile;
+                }
                 return file;
             } else {
                 indexBuf = Finance.GetOutIndexBuf(mediaData);

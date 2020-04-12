@@ -146,6 +146,11 @@ public class MsgBuilder {
                 redPacketMsg.setContent(redPacketMsg.getRedpacket());
                 redPacketMsg.setSeq(seq);
                 return redPacketMsg;
+            case disagree:
+                DisagreeMsg disagreeMsg = objectMapper.readValue(chatData, DisagreeMsg.class);
+                disagreeMsg.setContent(disagreeMsg.getDisagree());
+                disagreeMsg.setSeq(seq);
+                return disagreeMsg;
             case vote:
                 break;
             case chatrecord:

@@ -9,6 +9,13 @@ server:
 spring:
   application:
     name: work-wechat
+    #schedulerx任务调度配置
+  #  schedulerx2:
+  #    endpoint: acm.aliyun.com
+  #    namespace: 7058fea3-4014-4fd5-9fdd-ee08e3346ecd
+  #    groupId: local_dataopr
+  #    aliyunAccessKey: LTAI4FeuAnxwXjD8Lk8QrSs3
+  #    aliyunSecretKey: z01oZId87e3a58mDl1H2y2Epo2UPux
 
   datasource:
     url: jdbc:mysql://rm-bp148q2xv8ye4ay3r5o.mysql.rds.aliyuncs.com:3306/dw_data?useUnicode=true&&characterEncoding=UTF8&useSSL=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
@@ -43,3 +50,6 @@ aliyun:
 logging:
   level:
     com.cs.workwechat.mapper: debug
+
+
+

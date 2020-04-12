@@ -58,6 +58,7 @@ public class Task {
         try {
             getChatData();
         } catch (Exception e) {
+            log.error("数据同步异常：{}", e.getMessage());
             e.printStackTrace();
         }
     }
