@@ -14,8 +14,9 @@ typedef struct Slice_t {
 		} MediaData_t;
 		*/
 
-import java.io.*;
-import java.util.Objects;
+import com.cs.workwechat.util.ShellUtil;
+
+import java.io.File;
 
 /**
  * //返回码	错误说明
@@ -141,47 +142,17 @@ public class Finance {
 
     static {
         String findJarShell = "find -name *work-wechat*.jar";
-        Process process = null;
-        String line = "";
-        String jarName = "";
-        try {
-            process = Runtime.getRuntime().exec(findJarShell);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        InputStream input = process.getInputStream();
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            while ((line = reader.readLine()) != null) {
-                jarName = line.substring(line.lastIndexOf(File.separator));
-            }
-            String path = Finance.class.getClassLoader().getResource("").getPath().replace("file:", "");
-            System.out.println("jarName" + jarName);
-            String jarPath = path.substring(0, path.indexOf(jarName));
-            System.out.println(jarPath);
-            String jarShell = ("jar -xvf " + jarPath + jarName);
-            System.out.println(jarShell);
-            String cpShell = ("cp " + jarPath + "BOOT-INF/classes/libWeWorkFinanceSdk_Java.so " + "/usr/lib");
-            System.out.println(cpShell);
-            String and = " && ";
-            String a = "cd " + jarPath + and + jarShell + and + cpShell;
-            System.out.println(a);
-            CommandHelper.process(a);
-            System.loadLibrary("WeWorkFinanceSdk_Java");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (Objects.nonNull(input)) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (Objects.nonNull(process)) {
-                process.destroy();
-            }
-        }
+        ShellUtil.CommandResult reader = ShellUtil.execCommand(findJarShell, false);
+        String jarName = reader.successMsg.substring(reader.successMsg.lastIndexOf(File.separator) + 1);
+        String path = Finance.class.getClassLoader().getResource("").getPath().replace("file:", "");
+        String jarPath = path.substring(0, path.indexOf(jarName));
+        String jarShell = ("jar -xvf " + jarPath + jarName);
+        String cpShell = ("cp " + jarPath + "BOOT-INF/classes/libWeWorkFinanceSdk_Java.so " + "/usr/lib");
+        String and = " && ";
+        String cmd = "cd " + jarPath + and + jarShell + and + cpShell;
+        System.out.println(cmd);
+        ShellUtil.execCommand(cmd, false);
+        System.loadLibrary("WeWorkFinanceSdk_Java");
 
     }
 
