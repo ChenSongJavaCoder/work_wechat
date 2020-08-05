@@ -26,11 +26,9 @@ public class OssServiceImpl implements OssService {
     @Autowired
     OssConfig ossConfig;
 
-    String datePath = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + File.separator;
-
     @Override
     public String upload(File file, MediaType mediaType) {
-        String key = ossConfig.getFilePath(mediaType) + datePath + file.getName();
+        String key = ossConfig.getFilePath(mediaType) + LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE) + File.separator + file.getName();
         String ext = file.getName().substring(file.getName().lastIndexOf("."));
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentType(ContentTypeUtil.getContentType(ext));
@@ -41,7 +39,6 @@ public class OssServiceImpl implements OssService {
         ossClient.setObjectAcl(ossConfig.getBucketName(), key, CannedAccessControlList.PublicRead);
         ossClient.shutdown();
         log.info("上传key = {} 的图片,oss文件地址 = {}", key, ossConfig.getUrlPrefix() + File.separator + key);
-
         return key;
     }
 

@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Component
-public class Task {
+public class WorkWechatArchiveTask {
 
     @Autowired
     WorkWechatMsgMapper workWechatMsgMapper;
